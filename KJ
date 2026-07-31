@@ -1,0 +1,33 @@
+getgenv().FARM = true
+
+local plr = game.Players.LocalPlayer
+local RS = game:GetService("ReplicatedStorage")
+
+-- หา Remote ตี
+local attack
+for _,v in pairs(RS:GetDescendants()) do
+	if v:IsA("RemoteEvent") and (v.Name:find("Attack") or v.Name:find("Hit")) then
+		attack = v break
+	end
+end
+
+-- เช็ค Ki
+local function hasKi()
+	for _,v in pairs(plr.PlayerGui:GetDescendants()) do
+		if v:IsA("Frame") and v.Name:lower():find("ki") then
+			return (v.AbsoluteSize.X / v.Parent.AbsoluteSize.X) > 0.1
+		end
+	end
+	return true
+end
+
+print("เริ่มฟามแล้ว - ยืนตรงดัมมี่ที่อยากฟาม")
+
+while getgenv().FARM do
+	if attack then
+		if hasKi() then
+			attack:FireServer() -- กดตี
+		end
+	end
+	task.wait(0.15) -- มือถือให้ช้ากว่าคอม
+end
